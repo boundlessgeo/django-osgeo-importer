@@ -1,5 +1,5 @@
 openjdk-7-jdk
-postgresql-9.3-postgis-2.1
+postgresql-9.5-postgis-2.2
 libpq-dev
 python-dev
 python-lxml
@@ -16,4 +16,4 @@ python-pip
 build-essential
 libproj0
 libproj-dev
-postgresql-plpython-9.3
+postgresql-plpython-9.5

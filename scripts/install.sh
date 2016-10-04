@@ -27,10 +27,10 @@ sudo touch /etc/profile.d/gdal
 sudo su -c "echo 'export GDAL_DATA=/usr/local/lib/gdal/share/gdal/' >> /etc/profile.d/gdal.sh"
 
 
-sudo apt-get remove -y postgresql-9.3-postgis-2.1 # Remove postgis from pgdg, will install postgis from ubuntugis-unstable instead
-sudo apt-get install -y --no-install-recommends postgresql-9.3-postgis-2.1 libpq-dev python-dev python-lxml libxslt1-dev
+#sudo apt-get remove -y postgresql-9.3-postgis-2.1 # Remove postgis from pgdg, will install postgis from ubuntugis-unstable instead
+sudo apt-get install -y --no-install-recommends postgresql-9.5-postgis-2.2 libpq-dev python-dev python-lxml libxslt1-dev
 sudo apt-get install -y python-virtualenv python-imaging python-pyproj python-shapely python-nose python-httplib2 python-httplib2 gettext git
-sudo apt-get install -y libproj0 libproj-dev postgresql-plpython-9.3 python-numpy python-dateutil libjpeg62 libjpeg-dev zlib1g-dev python-dev libxml2 libxml2-dev libxslt1-dev libpq-dev postgis
+sudo apt-get install -y libproj0 libproj-dev postgresql-plpython-9.5 python-numpy python-dateutil libjpeg62 libjpeg-dev zlib1g-dev python-dev libxml2 libxml2-dev libxslt1-dev libpq-dev postgis
 #install libraries for a stacked out gdal
 sudo apt-get install -y sqlite3 libsqlite3-0 libsqlite3-dev libspatialite5 libspatialite-dev libcurl4-gnutls-dev libxerces-c-dev libxml2-dev 
 sudo apt-get install -y gpsbabel libfreexl-dev unixodbc-dev libwebp-dev libjpeg-dev libpq-dev libpng12-dev libjpeg-dev libgif-dev liblzma-dev
