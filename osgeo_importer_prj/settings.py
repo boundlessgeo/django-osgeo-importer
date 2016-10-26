@@ -27,6 +27,21 @@ from geonode.settings import *
 
 SITENAME = 'osgeo_importer_prj'
 
+IMPORT_HANDLERS = [
+    'osgeo_importer.handlers.FieldConverterHandler',
+    'osgeo_importer.handlers.geonode.GeoNodePublishHandler',
+    'osgeo_importer.handlers.geonode.GeoNodeMetadataHandler'
+
+    # If these are enabled, you must have an instance of geoserver running.
+#     'osgeo_importer.handlers.geoserver.GeoserverPublishHandler',
+#     'osgeo_importer.handlers.geoserver.GeoserverPublishCoverageHandler',
+#     'osgeo_importer.handlers.geoserver.GeoServerTimeHandler',
+#     'osgeo_importer.handlers.geoserver.GeoWebCacheHandler',
+#     'osgeo_importer.handlers.geoserver.GeoServerBoundsHandler',
+#     'osgeo_importer.handlers.geoserver.GenericSLDHandler',
+#     'osgeo_importer.handlers.geoserver.GeoServerStyleHandler',
+]
+
 # Defines the directory that contains the settings file as the LOCAL_ROOT
 # It is used for relative settings elsewhere.
 LOCAL_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -82,7 +97,7 @@ OSGEO_DATASTORE = 'datastore'
 OSGEO_IMPORTER_GEONODE_ENABLED = True
 OSGEO_IMPORTER_VALID_EXTENSIONS = [
     'shp', 'shx', 'prj', 'dbf', 'kml', 'geojson', 'json', 'tif', 'tiff',
-    'gpkg', 'csv','zip','xml','sld'
+    'gpkg', 'csv', 'zip', 'xml', 'sld'
 ]
 LOGGING['loggers']['osgeo_importer'] = {"handlers": ["console"], "level": "DEBUG"}
 DATABASE_ROUTERS = ['osgeo_importer_prj.dbrouters.DefaultOnlyMigrations']
