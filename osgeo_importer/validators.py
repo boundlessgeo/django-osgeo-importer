@@ -31,14 +31,32 @@ def valid_file(file):
             for content_name in zip.namelist():
                 content_file = zip.open(content_name)
                 content_errors = valid_file(content_file)
-                if not content_errors:
-                    errors.extend(content_errors)
+                # This does not work right...
+                #if not content_errors:
+                #    errors.extend(content_errors)
     elif extension not in ALL_OK_EXTENSIONS:
         errors.append(
             '{}: "{}" not found in VALID_EXTENSIONS, NONDATA_EXTENSIONS'.format(basename, extension)
         )
 
     return errors
+
+
+# DONE
+def valid_file2(file):
+    """ Returns an empty list if file is valid,
+        or a list of strings describing problems with the file.
+        @see VALID_EXTENSIONS, NONDATA_EXTENSIONS
+    """
+    basename = os.path.basename(file.name)
+    _, extension = os.path.splitext(basename)
+    extension = extension.lstrip('.').lower()
+
+    if extension not in ALL_OK_EXTENSIONS:
+        return '{0}: "{1}" not found in VALID_EXTENSIONS, ' \
+               'NONDATA_EXTENSIONS'.format(basename, extension)
+
+    return None
 
 
 def validate_shapefiles_have_all_parts(filenamelist):
@@ -63,6 +81,40 @@ def validate_shapefiles_have_all_parts(filenamelist):
         return False
 
 
+# DONE
+def validate_shapefiles_have_all_parts2(files):
+    shp = []
+    prj = []
+    dbf = []
+    shx = []
+    shape_files = set()
+    for file in files:
+        base, extension = os.path.splitext(file.name)
+        extension = extension.lstrip('.').lower()
+        if extension == 'shp':
+            shape_files.add(base)
+            shp.append(base)
+        elif extension == 'prj':
+            shape_files.add(base)
+            prj.append(base)
+        elif extension == 'dbf':
+            shape_files.add(base)
+            dbf.append(base)
+        elif extension == 'shx':
+            shape_files.add(base)
+            shx.append(base)
+    if set(shp) == set(prj) == set(dbf) == set(shx):
+        return None
+    else:
+        bad_files = []
+        for shpf in shape_files:
+            if shpf not in shp or shpf not in prj or shpf not in dbf or \
+                    shpf not in shx:
+                bad_files.append(shpf)
+        return bad_files
+
+
+# DONE
 def validate_inspector_can_read(filename):
     filedir, file = os.path.split(filename)
     base, extension = os.path.splitext(file)
@@ -77,5 +129,8 @@ def validate_inspector_can_read(filename):
             if description.get('raster') is False and description.get('geom_type') in inspector.INVALID_GEOMETRY_TYPES:
                 return False
     except NoDataSourceFound:
+        return False
+    # Happens when there is bad data such as a zip file that got passed in
+    except RuntimeError:
         return False
     return True

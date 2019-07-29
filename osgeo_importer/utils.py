@@ -20,6 +20,8 @@ import gdal
 import ogr
 import osr
 
+from zipfile import ZipExtFile
+
 logger = logging.getLogger(__name__)
 
 try:
@@ -156,6 +158,39 @@ def increment(s):
     else:
         return s + '0'
     return s
+
+
+# TODO: Can we pass outputdir into this function and retain
+# the temp directory, or should it use the higher scope?
+def move(file, dirname):
+    """
+    Move the file into the given directory and return updated cleaned file list
+    :param file: Either a Django uploaded temporary file or opened zip file
+    :param dirname: Name of the directory to move file into
+    :return: Newly cleaned file
+    """
+    version = 0
+    # TODO: Any better way to handle file name conflicts?
+    # replace inside of while loop with increment?
+    fname, extension = os.path.splitext(file.name)
+    while os.path.exists(dirname + '/' + fname + extension):
+        if version == 0:
+            fname = fname + '_{0}'.format(version)
+            version = version + 1
+        else:
+            # Find last instance of _ and take everything before it
+            fname = fname[:fname.rfind('_')]
+            fname = fname + '_{0}'.format(version)
+            version = version + 1
+    # TODO: Does this work correctly for zip or uploaded file?
+    with open(os.path.join(dirname, (fname + extension)),
+              'w') as outfile:
+        if isinstance(file, ZipExtFile):
+            shutil.copyfileobj(file, outfile)
+        else:
+            for chunk in file.chunks():
+                outfile.write(chunk)
+        return outfile
 
 
 class FileExists(Exception):
